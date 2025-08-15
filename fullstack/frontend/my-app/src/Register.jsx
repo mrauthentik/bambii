@@ -10,7 +10,7 @@ const Register = () => {
     const registerUser = async (e)=> {
     e.preventDefault()
     // Handle registration logic here
-        await axios.post('http://localhost:5200/api/auth/register', {email, password, fullname})
+        await axios.post('https://bambii.onrender.com/api/auth/register', {email, password, fullname})
         alert('User registered successfully')
         navigate('/login')
 

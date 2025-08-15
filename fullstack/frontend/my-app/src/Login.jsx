@@ -10,7 +10,7 @@ const Login = () => {
     const LoginUser = async (e)=> {
     e.preventDefault()
     // Handle registration logic here
-       const res = await axios.post('http://localhost:5200/api/auth/login', {email, password})
+       const res = await axios.post('https://bambii.onrender.com/api/auth/login', {email, password})
         setToken(res.data.token)
         localStorage.setItem('token', res.data.token)
         alert('User Login successfully')
