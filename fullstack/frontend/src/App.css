@@ -88,6 +88,7 @@ body {
   font-size: 16px;
   transition: all 0.3s ease;
   background: #f7fafc;
+  color: rgb(58, 51, 51);
 }
 
 .input-group input:focus {
