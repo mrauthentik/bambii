@@ -1,0 +1,224 @@
+/* Loader Component Styles */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.loader {
+  display: inline-block;
+  position: relative;
+}
+
+.loader-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(102, 126, 234, 0.2);
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loader-text {
+  color: #4a5568;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Loader Sizes */
+.loader-small .loader-spinner {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+}
+
+.loader-small .loader-text {
+  font-size: 12px;
+}
+
+.loader-medium .loader-spinner {
+  width: 40px;
+  height: 40px;
+  border-width: 3px;
+}
+
+.loader-large .loader-spinner {
+  width: 60px;
+  height: 60px;
+  border-width: 4px;
+}
+
+.loader-large .loader-text {
+  font-size: 16px;
+}
+
+/* Loader Colors */
+.loader-primary .loader-spinner {
+  border-color: rgba(102, 126, 234, 0.2);
+  border-top-color: #667eea;
+}
+
+.loader-success .loader-spinner {
+  border-color: rgba(72, 187, 120, 0.2);
+  border-top-color: #48bb78;
+}
+
+.loader-error .loader-spinner {
+  border-color: rgba(245, 101, 101, 0.2);
+  border-top-color: #f56565;
+}
+
+.loader-white .loader-spinner {
+  border-color: rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+}
+
+/* Loading Button Styles */
+.loading-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  min-height: 48px;
+}
+
+.loading-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.loading-btn.loading {
+  pointer-events: none;
+}
+
+.btn-loader {
+  display: inline-block;
+}
+
+.btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Spin Animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Full Screen Loader Overlay */
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loader-overlay .loader-container {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Inline Loader for Forms */
+.form-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.form-loader .loader-spinner {
+  width: 24px;
+  height: 24px;
+  border-width: 2px;
+}
+
+/* Pulsing Loader Alternative */
+.loader-pulse {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: #667eea;
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* Dots Loader */
+.loader-dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.loader-dots .dot {
+  width: 8px;
+  height: 8px;
+  background: #667eea;
+  border-radius: 50%;
+  animation: dots 1.4s ease-in-out infinite both;
+}
+
+.loader-dots .dot:nth-child(1) { animation-delay: -0.32s; }
+.loader-dots .dot:nth-child(2) { animation-delay: -0.16s; }
+.loader-dots .dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes dots {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .loading-btn {
+    padding: 12px 20px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+  
+  .loader-overlay .loader-container {
+    margin: 20px;
+    padding: 30px 20px;
+  }
+}

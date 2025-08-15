@@ -1,24 +1,64 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Toast from './components/Toast'
+import Loader from './components/Loader'
+import { useToast } from './hooks/useToast'
 
 const Dashboard = () => {
   const [user, setUser] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
+  const { toasts, showSuccess, showError, showInfo, removeToast } = useToast()
 
   useEffect(() => {
-    // Check if user is authenticated
-    const token = localStorage.getItem('token')
-    if (!token) {
-      navigate('/login')
-    } else {
-      // You can decode the token or make an API call to get user info
-      setUser({ name: 'User', email: 'user@example.com' }) // Placeholder
+    const authenticateUser = async () => {
+      try {
+        // Check if user is authenticated
+        const token = localStorage.getItem('token')
+        if (!token) {
+          showError('Please login to access the dashboard')
+          setTimeout(() => navigate('/login'), 1500)
+          return
+        }
+        
+        // Simulate API call to verify token and get user info
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        
+        // You can decode the token or make an API call to get user info
+        setUser({ name: 'User', email: 'user@example.com' }) // Placeholder
+        showInfo('Welcome to your dashboard!')
+        
+      } catch (error) {
+        console.error('Authentication error:', error)
+        showError('Failed to authenticate. Please login again.')
+        setTimeout(() => navigate('/login'), 1500)
+      } finally {
+        setIsLoading(false)
+      }
     }
-  }, [navigate])
+    
+    authenticateUser()
+  }, [navigate, showError, showInfo])
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    navigate('/login')
+    try {
+      localStorage.removeItem('token')
+      showSuccess('Logged out successfully!')
+      setTimeout(() => {
+        navigate('/login')
+      }, 1000)
+    } catch (error) {
+      console.error('Logout error:', error)
+      showError('Error during logout. Please try again.')
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <div className='dashboard-container' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Loader size='large' text='Loading your dashboard...' />
+      </div>
+    )
   }
 
   return (
@@ -78,6 +118,18 @@ const Dashboard = () => {
           </div>
         </div>
       </main>
+      
+      {/* Toast Notifications */}
+      {toasts.map(toast => (
+        <Toast
+          key={toast.id}
+          message={toast.message}
+          type={toast.type}
+          isVisible={toast.isVisible}
+          onClose={() => removeToast(toast.id)}
+          duration={toast.duration}
+        />
+      ))}
     </div>
   )
 }
