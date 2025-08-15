@@ -3,12 +3,28 @@ import { useNavigate } from 'react-router-dom'
 import Toast from './components/Toast'
 import Loader from './components/Loader'
 import { useToast } from './hooks/useToast'
+import axios from 'axios'
 
 const Dashboard = () => {
   const [user, setUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
   const { toasts, showSuccess, showError, showInfo, removeToast } = useToast()
+
+  // Simple JWT decoder function
+  const decodeJWT = (token) => {
+    try {
+      const base64Url = token.split('.')[1]
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      }).join(''))
+      return JSON.parse(jsonPayload)
+    } catch (error) {
+      console.error('Error decoding JWT:', error)
+      return null
+    }
+  }
 
   useEffect(() => {
     const authenticateUser = async () => {
@@ -21,12 +37,41 @@ const Dashboard = () => {
           return
         }
         
-        // Simulate API call to verify token and get user info
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        // Try to decode JWT token to get user info
+        const decodedToken = decodeJWT(token)
         
-        // You can decode the token or make an API call to get user info
-        setUser({ name: 'User', email: 'user@example.com' }) // Placeholder
-        showInfo('Welcome to your dashboard!')
+        if (decodedToken) {
+          // If token contains user info, use it
+          const userData = {
+            name: decodedToken.fullname || decodedToken.name || 'User',
+            email: decodedToken.email || 'user@example.com',
+            id: decodedToken.id || decodedToken.userId
+          }
+          setUser(userData)
+          showInfo(`Welcome back, ${userData.name}!`)
+        } else {
+          // If token decoding fails, try to fetch user info from API
+          try {
+            const response = await axios.get('https://bambii.onrender.com/api/auth/profile', {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            })
+            
+            const userData = {
+              name: response.data.fullname || response.data.name || 'User',
+              email: response.data.email || 'user@example.com',
+              id: response.data.id || response.data._id
+            }
+            setUser(userData)
+            showInfo(`Welcome back, ${userData.name}!`)
+          } catch (apiError) {
+            console.error('API call failed:', apiError)
+            // Fallback to generic user info
+            setUser({ name: 'User', email: 'user@example.com' })
+            showInfo('Welcome to your dashboard!')
+          }
+        }
         
       } catch (error) {
         console.error('Authentication error:', error)
@@ -67,7 +112,9 @@ const Dashboard = () => {
         <div className='header-content'>
           <h1>Dashboard</h1>
           <div className='user-actions'>
-            <span className='welcome-text'>Welcome back!</span>
+            <span className='welcome-text'>
+              {user ? `Welcome back, ${user.name}!` : 'Welcome back!'}
+            </span>
             <button onClick={handleLogout} className='logout-btn'>Logout</button>
           </div>
         </div>
