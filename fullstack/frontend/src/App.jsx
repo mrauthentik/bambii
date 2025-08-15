@@ -20,10 +20,13 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
       </Router>
-      <p>Go to <a href="/register">Register</a></p>
+      <div className="links">
+        <p>Go to <a href="/register">Register</a></p>
       <p>Go to <a href="/login">Login</a></p>
       <p>Go to <a href="/dashboard">Dashboard</a></p>
       <p>Go to <a href="/">Home</a></p>
+      </div>
+      
     </div>
   )
 
